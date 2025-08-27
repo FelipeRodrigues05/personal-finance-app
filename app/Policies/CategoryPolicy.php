@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Policies;
 
@@ -6,14 +6,14 @@ use App\Enums\UserRole;
 use App\Models\Category;
 use App\Models\User;
 
-class CategoryPolicy
+final class CategoryPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->role == UserRole::ADMIN;
+        return $user->role === UserRole::ADMIN;
     }
 
     /**
@@ -21,7 +21,7 @@ class CategoryPolicy
      */
     public function view(User $user, Category $category): bool
     {
-        return $user->role == UserRole::ADMIN && $category->user() == $user;
+        return $user->role === UserRole::ADMIN && $category->user() === $user;
     }
 
     /**
@@ -37,7 +37,7 @@ class CategoryPolicy
      */
     public function update(User $user, Category $category): bool
     {
-        return $user->role == UserRole::ADMIN && $category->user() == $user;
+        return $user->role === UserRole::ADMIN && $category->user() === $user;
     }
 
     /**
@@ -45,7 +45,7 @@ class CategoryPolicy
      */
     public function delete(User $user, Category $category): bool
     {
-        return $user->role == UserRole::ADMIN && $category->user() == $user;
+        return $user->role === UserRole::ADMIN && $category->user() === $user;
     }
 
     /**
@@ -53,7 +53,7 @@ class CategoryPolicy
      */
     public function restore(User $user, Category $category): bool
     {
-        return $user->role == UserRole::ADMIN && $category->user() == $user;
+        return $user->role === UserRole::ADMIN && $category->user() === $user;
     }
 
     /**
@@ -61,6 +61,6 @@ class CategoryPolicy
      */
     public function forceDelete(User $user, Category $category): bool
     {
-        return $user->role == UserRole::ADMIN && $category->user() == $user;
+        return $user->role === UserRole::ADMIN && $category->user() === $user;
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Database\Factories;
 
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
  */
-class TransactionFactory extends Factory
+final class TransactionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,12 +19,12 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'value'             => $this->faker->randomFloat(2),
-            'type'              => $this->faker->randomElement(TransactionTypeEnum::cases()),
-            'when'              => now(),
-            'description'       => $this->faker->word(),
-            'category_id'       => $this->faker->randomElement([1, 2]),
-            'user_id'           => User::query()->first()
+            'value'       => $this->faker->randomFloat(2),
+            'type'        => $this->faker->randomElement(TransactionTypeEnum::cases()),
+            'when'        => now(),
+            'description' => $this->faker->paragraph(),
+            'category_id' => $this->faker->randomElement([1, 2]),
+            'user_id'     => User::query()->first(),
         ];
     }
 }

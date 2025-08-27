@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Policies;
 
@@ -6,14 +6,14 @@ use App\Enums\UserRole;
 use App\Models\Transaction;
 use App\Models\User;
 
-class TransactionPolicy
+final class TransactionPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->role == UserRole::ADMIN;
+        return $user->role === UserRole::ADMIN;
     }
 
     /**
@@ -21,7 +21,7 @@ class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        return $user->role == UserRole::ADMIN && $transaction->user() == $user;
+        return $user->role === UserRole::ADMIN && $transaction->user() === $user;
     }
 
     /**
@@ -37,7 +37,7 @@ class TransactionPolicy
      */
     public function update(User $user, Transaction $transaction): bool
     {
-        return $user->role == UserRole::ADMIN && $transaction->user() == $user;
+        return $user->role === UserRole::ADMIN && $transaction->user() === $user;
     }
 
     /**
@@ -45,7 +45,7 @@ class TransactionPolicy
      */
     public function delete(User $user, Transaction $transaction): bool
     {
-        return $user->role == UserRole::ADMIN && $transaction->user() == $user;
+        return $user->role === UserRole::ADMIN && $transaction->user() === $user;
     }
 
     /**
@@ -53,7 +53,7 @@ class TransactionPolicy
      */
     public function restore(User $user, Transaction $transaction): bool
     {
-        return $user->role == UserRole::ADMIN && $transaction->user() == $user;
+        return $user->role === UserRole::ADMIN && $transaction->user() === $user;
     }
 
     /**
@@ -61,6 +61,6 @@ class TransactionPolicy
      */
     public function forceDelete(User $user, Transaction $transaction): bool
     {
-        return $user->role == UserRole::ADMIN && $transaction->user() == $user;
+        return $user->role === UserRole::ADMIN && $transaction->user() === $user;
     }
 }

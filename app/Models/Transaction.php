@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Models;
 
@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Transaction extends Model
+final class Transaction extends Model
 {
     /** @use HasFactory<\Database\Factories\TransactionFactory> */
     use HasFactory;
@@ -18,16 +18,8 @@ class Transaction extends Model
         'when',
         'description',
         'category_id',
-        'user_id'
+        'user_id',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'type' => TransactionTypeEnum::class,
-            'when' => 'datetime'
-        ];
-    }
 
     public function category(): BelongsTo
     {
@@ -37,5 +29,13 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'type' => TransactionTypeEnum::class,
+            'when' => 'datetime',
+        ];
     }
 }
