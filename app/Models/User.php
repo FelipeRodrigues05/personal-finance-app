@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-final class User extends Authenticatable implements FilamentUser
+final class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
@@ -61,10 +61,5 @@ final class User extends Authenticatable implements FilamentUser
             'password'          => 'hashed',
             'role'              => UserRole::class,
         ];
-    }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->role == UserRole::ADMIN;
     }
 }
