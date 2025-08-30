@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace App\Filament\Resources\Transactions;
 
@@ -10,6 +10,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,9 @@ final class TransactionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Transaction';
 
+    /**
+     * @throws \Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
@@ -34,21 +38,18 @@ final class TransactionResource extends Resource
             ->filters([
                 SelectFilter::make('type')
                     ->options([
-                        'CREDIT' => 'Credit',
-                        'DEBIT'  => 'Debit',
+                        'EXPENSE' => 'Expense',
+                        'INCOME' => 'Income',
                     ]),
                 SelectFilter::make('category')
                     ->relationship('category', 'name')->searchable(),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->toolbarActions([]);
     }
 
     public static function getPages(): array
@@ -68,15 +69,18 @@ final class TransactionResource extends Resource
         return 'The number of transactions';
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function getColumns(): array
     {
         return [
             TextColumn::make('user.name')->weight(FontWeight::Bold),
 
             TextColumn::make('value')->money('BRL', locale: 'pt-BR')->sortable()
-                ->color(fn ($record): string => match ($record->type) {
-                    TransactionTypeEnum::CREDIT => 'danger',
-                    TransactionTypeEnum::DEBIT  => 'success',
+                ->color(fn($record): string => match ($record->type) {
+                    TransactionTypeEnum::EXPENSE => 'danger',
+                    TransactionTypeEnum::INCOME => 'success',
                 }),
 
             TextColumn::make('description')
@@ -93,7 +97,7 @@ final class TransactionResource extends Resource
 
             TextColumn::make('category.name')->badge(),
 
-            TextColumn::make('when')->dateTime('M j, Y H:i:s')->sortable(),
+            TextColumn::make('transaction_date')->dateTime('M j, Y H:i:s')->sortable(),
 
         ];
     }

@@ -21,7 +21,7 @@ final class TransactionFactory extends Factory
         return [
             'value'       => $this->faker->randomFloat(2),
             'type'        => $this->faker->randomElement(TransactionTypeEnum::cases()),
-            'when'        => now(),
+            'transaction_date'        => now(),
             'description' => $this->faker->paragraph(),
             'category_id' => $this->faker->randomElement([1, 2]),
             'user_id'     => User::query()->first(),

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TransactionTypeEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ final class Transaction extends Model
     protected $fillable = [
         'value',
         'type',
-        'when',
+        'transaction_date',
         'description',
         'category_id',
         'user_id',
@@ -31,11 +32,16 @@ final class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopeFromUser(Builder $query)
+    {
+        return $query->where('user_id', auth()->user()->id);
+    }
+
     protected function casts(): array
     {
         return [
-            'type' => TransactionTypeEnum::class,
-            'when' => 'datetime',
+            'type'             => TransactionTypeEnum::class,
+            'transaction_date' => 'datetime',
         ];
     }
 }

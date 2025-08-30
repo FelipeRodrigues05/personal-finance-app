@@ -6,6 +6,7 @@ use App\Enums\TransactionTypeEnum;
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Models\Category;
 use App\Models\Transaction;
+use Exception;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\MarkdownEditor;
@@ -25,6 +26,9 @@ final class ManageTransactions extends ManageRecords
 
     protected ?string $subheading = 'A list of all Transactions';
 
+    /**
+     * @throws Exception
+     */
     protected function getHeaderActions(): array
     {
         return [
@@ -45,10 +49,10 @@ final class ManageTransactions extends ManageRecords
                                 ->required()
                                 ->native(false),
 
-                            DateTimePicker::make('when')->required(),
+                            DateTimePicker::make('transaction_date')->required(),
 
                             Radio::make('type')
-                                ->options(['Credit', 'Debit'])
+                                ->options(['Expense', 'Income'])
                                 ->required(),
                         ])
                         ->columns(2),
@@ -65,12 +69,12 @@ final class ManageTransactions extends ManageRecords
     private function save(array $data)
     {
         $transaction = Transaction::query()->create([
-            'value'       => data_get($data, 'value'),
-            'category_id' => Category::query()->findOrFail(data_get($data, 'category'))->id,
-            'user_id'     => auth()->user()->id,
-            'description' => data_get($data, 'description'),
-            'type'        => data_get($data, 'type') === '1' ? TransactionTypeEnum::DEBIT : TransactionTypeEnum::CREDIT,
-            'when'        => data_get($data, 'when'),
+            'value'            => data_get($data, 'value'),
+            'category_id'      => Category::query()->findOrFail(data_get($data, 'category'))->id,
+            'user_id'          => auth()->user()->id,
+            'description'      => data_get($data, 'description'),
+            'type'             => data_get($data, 'type') === '1' ? TransactionTypeEnum::INCOME : TransactionTypeEnum::EXPENSE,
+            'transaction_date' => data_get($data, 'transaction_date'),
         ]);
 
         if ($transaction) {
@@ -80,7 +84,7 @@ final class ManageTransactions extends ManageRecords
                 ->send();
         } else {
             Notification::make()
-                ->title('An error has occured')
+                ->title('An error has occurred')
                 ->danger()
                 ->send();
         }

@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->id();
             $table->decimal('value', 10, 2);
             $table->enum('type', TransactionTypeEnum::cases());
-            $table->timestamp('when');
+            $table->timestamp('transaction_date');
             $table->text('description')->nullable();
 
             $table->foreignIdFor(Category::class, 'category_id');

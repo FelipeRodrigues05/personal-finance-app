@@ -1,7 +1,9 @@
 {
     "preset": "psr12",
     "notPath": [
-        "tests/TestCase.php"
+        "tests/TestCase.php",
+        "app/Filament/Resources/Categories/CategoryResource",
+        "app/Filament/Resources/Transactions/TransactionResource"
     ],
     "rules": {
         "declare_strict_types": true,
