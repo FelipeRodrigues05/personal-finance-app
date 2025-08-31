@@ -19,12 +19,12 @@ final class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            'value'       => $this->faker->randomFloat(2),
-            'type'        => $this->faker->randomElement(TransactionTypeEnum::cases()),
-            'transaction_date'        => now(),
-            'description' => $this->faker->paragraph(),
-            'category_id' => $this->faker->randomElement([1, 2]),
-            'user_id'     => User::query()->first(),
+            'value'            => $this->faker->randomFloat(2),
+            'type'             => $this->faker->randomElement(TransactionTypeEnum::cases()),
+            'transaction_date' => now(),
+            'description'      => $this->faker->paragraph(),
+            'category_id'      => $this->faker->randomElement([1, 2]),
+            'user_id'          => User::query()->first(),
         ];
     }
 }

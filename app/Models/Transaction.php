@@ -21,12 +21,18 @@ final class Transaction extends Model
         'description',
         'category_id',
         'user_id',
-        'image_path'
+        'image_path',
+        'card_id',
+        'used_card'
     ];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function card(): BelongsTo {
+        return $this->belongsTo(Card::class);
     }
 
     public function user(): BelongsTo

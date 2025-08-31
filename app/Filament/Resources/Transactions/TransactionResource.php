@@ -5,13 +5,10 @@ namespace App\Filament\Resources\Transactions;
 use App\Enums\TransactionTypeEnum;
 use App\Filament\Resources\Transactions\Pages\ManageTransactions;
 use App\Filament\Resources\Transactions\Pages\ViewTransaction;
-use App\Filament\Schemas\TransactionSchema;
 use App\Models\Category;
 use App\Models\Transaction;
 use BackedEnum;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
@@ -19,10 +16,9 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\ImageEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
+use Filament\Support\Enums\FontFamily;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -126,7 +122,9 @@ final class TransactionResource extends Resource
                     }
 
                     return $state;
-                })->searchable(),
+                })->searchable()->placeholder('-'),
+
+            TextColumn::make('card.name')->searchable()->fontFamily(FontFamily::Mono)->weight(FontWeight::Medium)->icon(Heroicon::CreditCard)->placeholder('-'),
 
             TextColumn::make('category.name')->badge(),
 

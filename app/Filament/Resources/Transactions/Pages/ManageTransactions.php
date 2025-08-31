@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Transactions\Pages;
 
+use App\Actions\Transaction\CreateTransactionAction;
 use App\Enums\TransactionTypeEnum;
 use App\Filament\Resources\Transactions\TransactionResource;
+use App\Models\Card;
 use App\Models\Category;
 use App\Models\Transaction;
 use Exception;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
@@ -33,9 +36,9 @@ final class ManageTransactions extends ManageRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make('All Transactions')->icon(Heroicon::ListBullet),
-            'income' => Tab::make('Income')->icon(Heroicon::ArrowTrendingUp)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::INCOME)),
-            'expense' => Tab::make('Expense')->icon(Heroicon::ArrowTrendingDown)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::EXPENSE))
+            'all'     => Tab::make('All Transactions')->icon(Heroicon::ListBullet),
+            'income'  => Tab::make('Income')->icon(Heroicon::ArrowTrendingUp)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::INCOME)),
+            'expense' => Tab::make('Expense')->icon(Heroicon::ArrowTrendingDown)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::EXPENSE)),
         ];
     }
 
@@ -76,41 +79,18 @@ final class ManageTransactions extends ManageRecords
 
                             FileUpload::make('attachment')->disk('s3')->visibility('public')->directory('uploads')->required(),
                         ]),
+                    Step::make('Cards')
+                        ->schema([
+                            Checkbox::make('used_card'),
+                            Select::make('card')->options(Card::query()->fromUser()->pluck('name', 'id'))
+                        ]),
                     Step::make('Description')
                         ->schema([
                             MarkdownEditor::make('description'),
                         ]),
                 ])
-                ->action(fn (array $data) => $this->save($data))
+                ->action(fn (array $data) => CreateTransactionAction::handle(collect($data)))
                 ->slideOver(),
         ];
-    }
-
-    private function save(array $data): void
-    {
-        $fileURL = Storage::disk('s3')->url(data_get($data, 'attachment'));
-
-        $transaction = Transaction::query()->create([
-            'value'            => data_get($data, 'value'),
-            'category_id'      => Category::query()->findOrFail(data_get($data, 'category'))->id,
-            'user_id'          => auth()->user()->id,
-            'description'      => data_get($data, 'description'),
-            'type'             => data_get($data, 'type') === '1' ? TransactionTypeEnum::INCOME : TransactionTypeEnum::EXPENSE,
-            'transaction_date' => data_get($data, 'transaction_date'),
-            'image_path'       => $fileURL,
-        ]);
-
-        if ($transaction) {
-            Notification::make()
-                ->title('Saved successfully')
-                ->success()
-                ->send();
-        } else {
-            Notification::make()
-                ->title('An error has occurred')
-                ->danger()
-                ->send();
-        }
-
     }
 }

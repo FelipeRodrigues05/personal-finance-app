@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Livewire\ExpenseCardChart;
 use App\Livewire\ExpenseCategoryChart;
 use App\Livewire\IncomeVsExpenseChart;
 use BackedEnum;
@@ -52,6 +53,7 @@ final class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             IncomeVsExpenseChart::class,
+            ExpenseCardChart::class,
             ExpenseCategoryChart::class,
         ];
     }

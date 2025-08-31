@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 use App\Enums\TransactionTypeEnum;
+use App\Models\Card;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -17,12 +18,14 @@ return new class () extends Migration {
             $table->id();
             $table->foreignIdFor(Category::class, 'category_id');
             $table->foreignIdFor(User::class, 'user_id');
+            $table->foreignIdFor(Card::class, 'card_id')->nullable();
 
             $table->decimal('value', 10, 2);
             $table->enum('type', TransactionTypeEnum::cases());
             $table->timestamp('transaction_date');
             $table->text('description')->nullable();
             $table->string('image_path')->nullable();
+            $table->string('used_card')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
