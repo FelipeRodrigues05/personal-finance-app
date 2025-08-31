@@ -8,15 +8,19 @@ use App\Models\Category;
 use App\Models\Transaction;
 use Exception;
 use Filament\Actions\Action;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Storage;
 
 final class ManageTransactions extends ManageRecords
 {
@@ -25,6 +29,15 @@ final class ManageTransactions extends ManageRecords
     protected ?string $heading = 'Transactions';
 
     protected ?string $subheading = 'A list of all Transactions';
+
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make('All Transactions')->icon(Heroicon::ListBullet),
+            'income' => Tab::make('Income')->icon(Heroicon::ArrowTrendingUp)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::INCOME)),
+            'expense' => Tab::make('Expense')->icon(Heroicon::ArrowTrendingDown)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::EXPENSE))
+        ];
+    }
 
     /**
      * @throws Exception
@@ -37,25 +50,32 @@ final class ManageTransactions extends ManageRecords
                 ->steps([
                     Step::make('Transaction Info')
                         ->schema([
-                            TextInput::make('value')
-                                ->required()
-                                ->numeric()
-                                ->prefix('R$ ')
-                                ->placeholder('1.000,00')
-                                ->live(),
+                            Grid::make()
+                                ->columns(2)
+                                ->schema([
+                                    TextInput::make('value')
+                                        ->required()
+                                        ->numeric()
+                                        ->prefix('R$ ')
+                                        ->placeholder('1.000,00')
+                                        ->live(),
 
-                            Select::make('category')
-                                ->options(Category::query()->fromUser()->pluck('name', 'id'))
-                                ->required()
-                                ->native(false),
+                                    Select::make('category')
+                                        ->options(Category::query()->fromUser()->pluck('name', 'id'))
+                                        ->required()
+                                        ->native(false),
+                                ]),
+                            Grid::make()->columns(2)
+                                ->schema([
+                                    DatePicker::make('transaction_date')->required()->native(false)->default(now()),
 
-                            DateTimePicker::make('transaction_date')->required(),
+                                    Radio::make('type')
+                                        ->options(['Expense', 'Income'])
+                                        ->required(),
+                                ]),
 
-                            Radio::make('type')
-                                ->options(['Expense', 'Income'])
-                                ->required(),
-                        ])
-                        ->columns(2),
+                            FileUpload::make('attachment')->disk('s3')->visibility('public')->directory('uploads')->required(),
+                        ]),
                     Step::make('Description')
                         ->schema([
                             MarkdownEditor::make('description'),
@@ -66,8 +86,10 @@ final class ManageTransactions extends ManageRecords
         ];
     }
 
-    private function save(array $data)
+    private function save(array $data): void
     {
+        $fileURL = Storage::disk('s3')->url(data_get($data, 'attachment'));
+
         $transaction = Transaction::query()->create([
             'value'            => data_get($data, 'value'),
             'category_id'      => Category::query()->findOrFail(data_get($data, 'category'))->id,
@@ -75,6 +97,7 @@ final class ManageTransactions extends ManageRecords
             'description'      => data_get($data, 'description'),
             'type'             => data_get($data, 'type') === '1' ? TransactionTypeEnum::INCOME : TransactionTypeEnum::EXPENSE,
             'transaction_date' => data_get($data, 'transaction_date'),
+            'image_path'       => $fileURL,
         ]);
 
         if ($transaction) {

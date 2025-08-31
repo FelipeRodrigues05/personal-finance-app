@@ -15,14 +15,14 @@ return new class () extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Category::class, 'category_id');
+            $table->foreignIdFor(User::class, 'user_id');
+
             $table->decimal('value', 10, 2);
             $table->enum('type', TransactionTypeEnum::cases());
             $table->timestamp('transaction_date');
             $table->text('description')->nullable();
-
-            $table->foreignIdFor(Category::class, 'category_id');
-            $table->foreignIdFor(User::class, 'user_id');
-
+            $table->string('image_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

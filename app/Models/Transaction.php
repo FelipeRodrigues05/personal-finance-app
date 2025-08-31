@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TransactionTypeEnum;
+use Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class Transaction extends Model
 {
-    /** @use HasFactory<\Database\Factories\TransactionFactory> */
+    /** @use HasFactory<TransactionFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -20,6 +21,7 @@ final class Transaction extends Model
         'description',
         'category_id',
         'user_id',
+        'image_path'
     ];
 
     public function category(): BelongsTo

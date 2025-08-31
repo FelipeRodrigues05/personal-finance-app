@@ -4,6 +4,9 @@ namespace App\Filament\Resources\Transactions;
 
 use App\Enums\TransactionTypeEnum;
 use App\Filament\Resources\Transactions\Pages\ManageTransactions;
+use App\Filament\Resources\Transactions\Pages\ViewTransaction;
+use App\Filament\Schemas\TransactionSchema;
+use App\Models\Category;
 use App\Models\Transaction;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -11,7 +14,15 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -36,17 +47,37 @@ final class TransactionResource extends Resource
             ->recordTitleAttribute('Transaction')
             ->columns(self::getColumns())
             ->filters([
-                SelectFilter::make('type')
-                    ->options([
-                        'EXPENSE' => 'Expense',
-                        'INCOME' => 'Income',
-                    ]),
                 SelectFilter::make('category')
                     ->relationship('category', 'name')->searchable(),
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()->schema([
+                    Section::make('Transaction Receipt')
+                        ->schema([
+                            FileUpload::make('image_path')
+                                ->disk('s3')
+                                ->visibility('public')
+                                ->previewable()
+                                ->live()
+                        ]),
+                    Section::make('Transaction Information')
+                        ->schema([
+                            TextInput::make('value'),
+                            DatePicker::make('transaction_date'),
+                            Select::make('type')->options([
+                                "income" => "Income",
+                                "expense" => "Expense",
+                            ])->native(false),
+                            Select::make('category')
+                                ->options(Category::query()->fromUser()->pluck('name'))
+                                ->native(false),
+                        ]),
+                    Section::make('Transaction Description')
+                        ->schema([
+                            MarkdownEditor::make('description'),
+                        ])
+                ]),
                 DeleteAction::make(),
             ])
             ->toolbarActions([]);
@@ -56,6 +87,7 @@ final class TransactionResource extends Resource
     {
         return [
             'index' => ManageTransactions::route('/'),
+            'view' => ViewTransaction::route('/{record}'),
         ];
     }
 
@@ -68,6 +100,7 @@ final class TransactionResource extends Resource
     {
         return 'The number of transactions';
     }
+
 
     /**
      * @throws \Exception
@@ -97,7 +130,7 @@ final class TransactionResource extends Resource
 
             TextColumn::make('category.name')->badge(),
 
-            TextColumn::make('transaction_date')->dateTime('M j, Y H:i:s')->sortable(),
+            TextColumn::make('transaction_date')->dateTime('M j, Y')->sortable(),
 
         ];
     }
