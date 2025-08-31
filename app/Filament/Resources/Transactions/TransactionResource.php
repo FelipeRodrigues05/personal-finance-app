@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Transactions;
 
 use App\Enums\TransactionTypeEnum;
+use App\Filament\Exports\TransactionExporter;
 use App\Filament\Resources\Transactions\Pages\ManageTransactions;
 use App\Filament\Resources\Transactions\Pages\ViewTransaction;
 use App\Models\Category;
@@ -10,6 +11,7 @@ use App\Models\Transaction;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -75,6 +77,10 @@ final class TransactionResource extends Resource
                         ])
                 ]),
                 DeleteAction::make(),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(TransactionExporter::class),
             ])
             ->toolbarActions([]);
     }

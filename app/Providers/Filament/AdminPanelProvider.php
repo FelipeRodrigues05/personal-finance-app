@@ -22,6 +22,7 @@ final class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->brandName("PFS")
             ->id('admin')
             ->path('admin')
             ->login()
@@ -47,6 +48,7 @@ final class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications();
     }
 }

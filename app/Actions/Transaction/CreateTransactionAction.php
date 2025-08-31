@@ -22,7 +22,7 @@ final class CreateTransactionAction
             'value'            => $data->get('value'),
             'category_id'      => Category::query()->findOrFail($data->get('category'))->id,
             'user_id'          => auth()->user()->id,
-            'card_id'          => $card->id,
+            'card_id'          => $card?->id,
             'description'      => $data->get('description'),
             'type'             => $transactionType,
             'transaction_date' => $data->get('transaction_date'),
