@@ -34,7 +34,8 @@ final class Card extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function scopeFromUser(Builder $query): Builder {
+    public function scopeFromUser(Builder $query): Builder
+    {
         return $query->where('user_id', auth()->user()->id);
     }
 

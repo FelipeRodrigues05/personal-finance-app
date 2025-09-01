@@ -7,23 +7,20 @@ use App\Enums\TransactionTypeEnum;
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Models\Card;
 use App\Models\Category;
-use App\Models\Transaction;
 use Exception;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Pages\ManageRecords;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Storage;
 
 final class ManageTransactions extends ManageRecords
 {
@@ -39,6 +36,7 @@ final class ManageTransactions extends ManageRecords
             'all'     => Tab::make('All Transactions')->icon(Heroicon::ListBullet),
             'income'  => Tab::make('Income')->icon(Heroicon::ArrowTrendingUp)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::INCOME)),
             'expense' => Tab::make('Expense')->icon(Heroicon::ArrowTrendingDown)->modifyQueryUsing(fn ($query) => $query->where('type', TransactionTypeEnum::EXPENSE)),
+            'is_recurrent' => Tab::make('Recurrents')->icon(Heroicon::Clock)->modifyQueryUsing(fn ($query) => $query->where('is_recurrent', true)),
         ];
     }
 
@@ -70,10 +68,18 @@ final class ManageTransactions extends ManageRecords
                                 ]),
                             Grid::make()->columns(2)
                                 ->schema([
-                                    DatePicker::make('transaction_date')->required()->native(false)->default(now()),
+                                    DatePicker::make('transaction_date')
+                                        ->required()
+                                        ->native(false)
+                                        ->helperText('If is recurrent this will be the expiration date')
+                                        ->default(now()),
 
                                     Radio::make('type')
                                         ->options(['Expense', 'Income'])
+                                        ->required(),
+
+                                    Toggle::make('is_recurrent')
+                                        ->inline(false)
                                         ->required(),
                                 ]),
 
@@ -81,8 +87,7 @@ final class ManageTransactions extends ManageRecords
                         ]),
                     Step::make('Cards')
                         ->schema([
-                            Checkbox::make('used_card'),
-                            Select::make('card')->options(Card::query()->fromUser()->pluck('name', 'id'))
+                            Select::make('card')->options(Card::query()->fromUser()->pluck('name', 'id'))->native(false),
                         ]),
                     Step::make('Description')
                         ->schema([

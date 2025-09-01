@@ -25,7 +25,8 @@ return new class () extends Migration {
             $table->timestamp('transaction_date');
             $table->text('description')->nullable();
             $table->string('image_path')->nullable();
-            $table->string('used_card')->nullable();
+            $table->boolean('used_card')->nullable();
+            $table->boolean('is_recurrent')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

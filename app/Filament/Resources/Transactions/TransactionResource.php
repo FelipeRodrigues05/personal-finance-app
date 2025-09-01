@@ -23,6 +23,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Support\Enums\FontFamily;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -135,6 +136,8 @@ final class TransactionResource extends Resource
             TextColumn::make('category.name')->badge(),
 
             TextColumn::make('transaction_date')->dateTime('M j, Y')->sortable(),
+
+            IconColumn::make('is_recurrent')->boolean()
 
         ];
     }

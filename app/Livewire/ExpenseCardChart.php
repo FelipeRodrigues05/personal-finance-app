@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Livewire;
 
 use App\Models\Card;
 use Filament\Widgets\ChartWidget;
 
-class ExpenseCardChart extends ChartWidget
+final class ExpenseCardChart extends ChartWidget
 {
     protected ?string $heading = 'Expense Card Chart';
 

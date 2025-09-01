@@ -1,20 +1,21 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Filament\Exports;
 
 use App\Enums\TransactionTypeEnum;
 use App\Models\Transaction;
+use Exception;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
 use Illuminate\Support\Number;
 
-class TransactionExporter extends Exporter
+final class TransactionExporter extends Exporter
 {
     protected static ?string $model = Transaction::class;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function getColumns(): array
     {

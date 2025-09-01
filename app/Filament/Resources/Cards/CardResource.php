@@ -5,13 +5,13 @@ namespace App\Filament\Resources\Cards;
 use App\Filament\Resources\Cards\Pages\ManageCards;
 use App\Models\Card;
 use BackedEnum;
+use Exception;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -29,7 +29,7 @@ final class CardResource extends Resource
     protected static ?string $recordTitleAttribute = 'Cards';
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function form(Schema $schema): Schema
     {
@@ -39,12 +39,12 @@ final class CardResource extends Resource
                 ColorPicker::make('color'),
                 TextInput::make('limit')->prefix('R$')->numeric(),
                 TextInput::make('used')->prefix('R$')->numeric(),
-                Radio::make('type')->options(['Credit', 'Debit'])->default('type')
+                Radio::make('type')->options(['Credit', 'Debit'])->default('type'),
             ]);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function table(Table $table): Table
     {
@@ -56,7 +56,7 @@ final class CardResource extends Resource
                     ->searchable(),
                 TextColumn::make('type')->badge(),
                 TextColumn::make('limit')->money('BRL', locale: 'pt-BR'),
-                TextColumn::make('used')->money('BRL', locale: 'pt-BR')
+                TextColumn::make('used')->money('BRL', locale: 'pt-BR'),
             ])
             ->filters([])
             ->recordActions([

@@ -2,13 +2,17 @@
 
 namespace App\Livewire;
 
+use App\Enums\TransactionTypeEnum;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Support\Collection;
 
 final class ExpenseCategoryChart extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected ?string $heading = 'Expense Category Chart';
 
     protected int|string|array $columnSpan = '1/2';
@@ -19,17 +23,18 @@ final class ExpenseCategoryChart extends ChartWidget
         $endDate   = isset($this->pageFilters['endDate']) ? Carbon::parse($this->pageFilters['endDate']) : now();
 
         $categoryData = Transaction::query()
-            ->fromUser() // Assuming this is a scope
-            ->with('category') // Eager load the category relationship
+            ->fromUser()
+            ->with('category')
             ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->where('type', TransactionTypeEnum::EXPENSE)
             ->get()
             ->groupBy('category.name')
-            ->map(function (Collection $transactions, $categoryName) {
+            ->map(function (Collection $transactions) {
                 $category = $transactions->first()->category;
 
                 return [
                     'total' => $transactions->sum('value'),
-                    'color' => $category ? $category->color ?? '#808080' : '#808080', // Default gray if no category
+                    'color' => $category ? $category->color ?? '#808080' : '#808080',
                 ];
             });
 
@@ -39,11 +44,9 @@ final class ExpenseCategoryChart extends ChartWidget
             return [
                 'datasets' => [
                     [
-                        'label'           => 'Transaction Amounts',
-                        'data'            => [1], // Placeholder data to force render
+                        'data'            => [0], // Placeholder data to force render
                         'backgroundColor' => ['rgba(150, 150, 150, 0.8)'], // Gray for no data
                         'borderColor'     => ['rgba(150, 150, 150, 1)'],
-                        'borderWidth'     => 1,
                     ],
                 ],
                 'labels' => ['No Data'],
@@ -59,7 +62,7 @@ final class ExpenseCategoryChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label'           => 'Transaction Amounts',
+                    'label'           => 'Transactions Value',
                     'data'            => $data,
                     'backgroundColor' => $backgroundColors,
                     'borderColor'     => $borderColors,

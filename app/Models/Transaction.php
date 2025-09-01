@@ -23,7 +23,8 @@ final class Transaction extends Model
         'user_id',
         'image_path',
         'card_id',
-        'used_card'
+        'used_card',
+        'is_recurrent',
     ];
 
     public function category(): BelongsTo
@@ -31,7 +32,8 @@ final class Transaction extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function card(): BelongsTo {
+    public function card(): BelongsTo
+    {
         return $this->belongsTo(Card::class);
     }
 
