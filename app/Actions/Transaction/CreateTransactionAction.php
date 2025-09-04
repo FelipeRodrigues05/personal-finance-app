@@ -40,14 +40,20 @@ final class CreateTransactionAction
                 'used' => $card->used + $data->get('value'),
             ]);
         }
+
+        if ($data->get('is_recurrent')) {
+            self::scheduleRecurringTransaction($data);
+        }
     }
 
-    private function scheduleRecurringTransaction(array $data): void
+    private static function scheduleRecurringTransaction(Collection $data): void
     {
-        $nextDate = Carbon::parse($data['transaction_date'])->addMonthNoOverflow();
+        $nextDate = Carbon::parse($data->get('transaction_date'))->addMonthNoOverflow();
         // Queue a job to create the next transaction on the due date
         Queue::later($nextDate, new CreateTransactionRecurrentJob($data));
 
-        Log::info('Scheduled recurring transaction for: ' . $nextDate->toDateString(), $data);
+        Log::info('Scheduled recurring transaction for: ' . $nextDate->toDateString(), [
+            'data' => $data,
+        ]);
     }
 }

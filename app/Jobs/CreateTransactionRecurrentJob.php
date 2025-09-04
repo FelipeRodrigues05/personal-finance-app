@@ -6,15 +6,16 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 final class CreateTransactionRecurrentJob implements ShouldQueue
 {
     use Queueable;
 
-    protected array $data;
+    protected Collection $data;
 
-    public function __construct(array $data)
+    public function __construct(Collection $data)
     {
         $this->data = $data;
     }
@@ -22,13 +23,13 @@ final class CreateTransactionRecurrentJob implements ShouldQueue
     public function handle(): void
     {
         $transaction = Transaction::query()->create([
-            'value'            => $this->data['value'],
-            'transaction_date' => Carbon::parse($this->data['transaction_date'])->addMonthNoOverflow(),
-            'type'             => $this->data['type'],
-            'category_id'      => $this->data['category'],
-            'description'      => $this->data['description'],
+            'value'            => $this->data->get('value'),
+            'transaction_date' => Carbon::parse($this->data->get('transaction_date'))->addMonthNoOverflow(),
+            'type'             => $this->data->get('type'),
+            'category_id'      => $this->data->get('category'),
+            'description'      => $this->data->get('description'),
             'is_recurrent'     => true,
-            'used_card'        => $this->data['used_card'] ?? false,
+            'used_card'        => $this->data->get('used_card') ?? false,
         ]);
 
         Log::info('Created recurring transaction: ' . $transaction->id);

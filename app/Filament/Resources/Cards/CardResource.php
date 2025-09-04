@@ -11,9 +11,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -65,7 +62,8 @@ final class CardResource extends Resource
         ];
     }
 
-    private static function getColumns(): array {
+    private static function getColumns(): array
+    {
         return [
             ColorColumn::make('color')->label(__('Card Color'))
                 ->copyable(),
@@ -82,7 +80,8 @@ final class CardResource extends Resource
                 ->money('BRL', locale: 'pt-BR'),
 
             ViewColumn::make('usage')->label('Limit Usage')
-                ->getStateUsing(fn (Card $record) => $record->limit > 0
+                ->getStateUsing(
+                    fn (Card $record) => $record->limit > 0
                     ? round(($record->used / $record->limit) * 100)
                     : 0
                 )

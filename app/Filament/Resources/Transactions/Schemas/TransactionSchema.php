@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Filament\Resources\Transactions\Schemas;
 
-use App\Enums\TransactionTypeEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
@@ -13,7 +12,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
-class TransactionSchema
+final class TransactionSchema
 {
     public static function configure(Schema $schema): Schema
     {
@@ -32,7 +31,7 @@ class TransactionSchema
 
                         Select::make('type')->label(__('Transaction Type'))
                             ->options([
-                                'income' => "Income",
+                                'income'  => "Income",
                                 'expense' => "Expense",
                             ])->native(false),
 
@@ -49,7 +48,7 @@ class TransactionSchema
                 Section::make('Transaction Description')->icon(Heroicon::Bookmark)
                     ->schema([
                         MarkdownEditor::make('description')->label(__('Transaction Description')),
-                    ])
+                    ]),
             ]);
     }
 }

@@ -104,9 +104,10 @@ final class TransactionResource extends Resource
             TextColumn::make('user.name')->weight(FontWeight::Bold),
 
             TextColumn::make('value')->money('BRL', locale: 'pt-BR')->sortable()
-                ->color(fn($record): string => match ($record->type) {
+                ->color(fn(Transaction $record): string => match ($record->type) {
                     TransactionTypeEnum::EXPENSE => 'danger',
                     TransactionTypeEnum::INCOME => 'success',
+                    default => 'default'
                 }),
 
             TextColumn::make('description')

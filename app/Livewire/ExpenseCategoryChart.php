@@ -42,7 +42,7 @@ final class ExpenseCategoryChart extends ChartWidget
         $labels           = $categoryData->keys();
         $data             = $categoryData->pluck('total')->values();
         $backgroundColors = $categoryData->pluck('color')->map(fn ($color) => $color . '80')->values();
-        $borderColors       = $categoryData->pluck('color')->values();
+        $borderColors     = $categoryData->pluck('color')->values();
 
         return [
             'datasets' => [
@@ -63,7 +63,8 @@ final class ExpenseCategoryChart extends ChartWidget
         return 'doughnut';
     }
 
-    private function fetchTransactions(Carbon $startDate, Carbon $endDate) {
+    private function fetchTransactions(Carbon $startDate, Carbon $endDate)
+    {
         return Transaction::query()
             ->fromUser()
             ->with('category')

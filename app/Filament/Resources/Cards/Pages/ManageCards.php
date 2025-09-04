@@ -31,7 +31,8 @@ final class ManageCards extends ManageRecords
         ];
     }
 
-    private static function getForm(): array {
+    private static function getForm(): array
+    {
         return [
             Grid::make()
                 ->columns(3)

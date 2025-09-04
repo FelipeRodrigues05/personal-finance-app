@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Categories\Pages;
 
 use App\Actions\Category\CreateCategoryAction;
 use App\Filament\Resources\Categories\CategoryResource;
-use App\Models\Category;
 use Filament\Actions\Action;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
@@ -23,11 +22,12 @@ final class ManageCategories extends ManageRecords
             Action::make("add")
                 ->icon(Heroicon::PlusCircle)
                 ->schema(self::getForm())
-                ->action(fn(array $data) => CreateCategoryAction::handle(collect($data))),
+                ->action(fn (array $data) => CreateCategoryAction::handle(collect($data))),
         ];
     }
 
-    private static function getForm(): array {
+    private static function getForm(): array
+    {
         return [
             Grid::make()
                 ->schema([

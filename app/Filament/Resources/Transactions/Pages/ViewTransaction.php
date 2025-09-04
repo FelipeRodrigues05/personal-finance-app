@@ -37,11 +37,12 @@ final class ViewTransaction extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make()->icon(Heroicon::PencilSquare)->action(fn (array $data) => UpdateTransactionAction::handle(collect($data)))
+            EditAction::make()->icon(Heroicon::PencilSquare)->action(fn (array $data) => UpdateTransactionAction::handle(collect($data))),
         ];
     }
 
-    private function infolistContent(): array {
+    private function infolistContent(): array
+    {
         return [
             Section::make("Voucher")
                 ->icon(Heroicon::Photo)

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Actions\Transaction;
 
@@ -9,7 +9,7 @@ use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Collection;
 
-class UpdateTransactionAction
+final class UpdateTransactionAction
 {
     /**
      * @throws Exception
@@ -34,11 +34,11 @@ class UpdateTransactionAction
             'is_recurrent'     => $data->get('is_recurrent'),
         ]);
 
-        if($card) {
+        if ($card) {
             $amount = match ($data->get('type')) {
                 TransactionTypeEnum::EXPENSE->value => $card->used + $data->get('value'),
-                TransactionTypeEnum::INCOME->value => $card->used - $data->get('value'),
-                default => throw new Exception('Unexpected match value'),
+                TransactionTypeEnum::INCOME->value  => $card->used - $data->get('value'),
+                default                             => throw new Exception('Unexpected match value'),
             };
 
             $card->update([

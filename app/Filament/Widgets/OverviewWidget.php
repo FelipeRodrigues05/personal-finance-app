@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Filament\Widgets;
 
@@ -20,8 +20,11 @@ final class OverviewWidget extends StatsOverviewWidget
         $endDate   = isset($this->pageFilters['endDate']) ? Carbon::parse($this->pageFilters['endDate']) : now();
 
         return [
-            Stat::make('Spent', Number::currency($this->calculateExpenses($startDate, $endDate), 'BRL',
-                'pt-BR'))
+            Stat::make('Spent', Number::currency(
+                $this->calculateExpenses($startDate, $endDate),
+                'BRL',
+                'pt-BR'
+            ))
                 ->description('Total Spent'),
 
             Stat::make('Income', Number::currency($this->calculateIncome($startDate, $endDate), 'BRL', 'pt-BR'))

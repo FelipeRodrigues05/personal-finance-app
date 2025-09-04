@@ -54,7 +54,8 @@ final class ManageTransactions extends ManageRecords
         ];
     }
 
-    private static function steps(): array {
+    private static function steps(): array
+    {
         return [
             Step::make('Transaction Info')
                 ->schema([
