@@ -10,8 +10,7 @@ final class CreateCardAction
 {
     public static function handle(Collection $data): void
     {
-
-        $cardType = $data->get('type') === 0 ? CardType::CREDIT : CardType::DEBIT;
+        $cardType = $data->get('type') == 0 ? CardType::CREDIT : CardType::DEBIT;
 
         Card::query()->create([
             'user_id' => auth()->user()->id,

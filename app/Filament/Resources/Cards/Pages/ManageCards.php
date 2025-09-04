@@ -25,28 +25,34 @@ final class ManageCards extends ManageRecords
         return [
             Action::make('add')
                 ->icon(Heroicon::PlusCircle)
-                ->schema([
-                    Grid::make()
-                        ->columns(3)
-                        ->schema([
-                            TextInput::make('name')
-                                ->required(),
-
-                            ColorPicker::make('color')->required(),
-
-                            Radio::make('type')
-                                ->options(['Credit', 'Debit'])
-                                ->required(),
-                        ]),
-                    TextInput::make('limit')
-                        ->required()
-                        ->numeric()
-                        ->prefix('R$ ')
-                        ->placeholder('1.000,00')
-                        ->live(),
-                ])
+                ->schema(self::getForm())
                 ->action(fn (array $data) => CreateCardAction::handle(collect($data)))
                 ->slideOver(),
+        ];
+    }
+
+    private static function getForm(): array {
+        return [
+            Grid::make()
+                ->columns(3)
+                ->schema([
+                    TextInput::make('name')->label(__('Card Name'))
+                        ->required(),
+
+                    ColorPicker::make('color')->label(__('Card Color'))
+                        ->required(),
+
+                    Radio::make('type')->label(__('Card Type'))
+                        ->options(['Credit', 'Debit'])
+                        ->required(),
+                ]),
+
+            TextInput::make('limit')->label(__('Total Limit'))
+                ->required()
+                ->numeric()
+                ->prefix('R$ ')
+                ->placeholder('1.000,00')
+                ->live(),
         ];
     }
 }
