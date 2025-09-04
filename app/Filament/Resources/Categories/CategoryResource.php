@@ -33,25 +33,25 @@ final class CategoryResource extends Resource
     {
         return $table
             ->recordTitleAttribute('Category')
-            ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
-                ColorColumn::make('color'),
-            ])
-            ->filters([
-                //
-            ])
+            ->columns(self::getColumns())
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
-            ])
-            ->toolbarActions([]);
+            ]);
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ManageCategories::route('/'),
+        ];
+    }
+
+    private static function getColumns(): array {
+        return [
+            TextColumn::make('name')->label(__('Category Name'))
+                ->searchable(),
+            ColorColumn::make('color')->label(__('Category Color')),
         ];
     }
 }
