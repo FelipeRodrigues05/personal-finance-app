@@ -22,21 +22,7 @@ final class ExpenseCategoryChart extends ChartWidget
         $startDate = isset($this->pageFilters['startDate']) ? Carbon::parse($this->pageFilters['startDate']) : now()->startOfMonth();
         $endDate   = isset($this->pageFilters['endDate']) ? Carbon::parse($this->pageFilters['endDate']) : now();
 
-        $categoryData = Transaction::query()
-            ->fromUser()
-            ->with('category')
-            ->whereBetween('transaction_date', [$startDate, $endDate])
-            ->where('type', TransactionTypeEnum::EXPENSE)
-            ->get()
-            ->groupBy('category.name')
-            ->map(function (Collection $transactions) {
-                $category = $transactions->first()->category;
-
-                return [
-                    'total' => $transactions->sum('value'),
-                    'color' => $category ? $category->color ?? '#808080' : '#808080',
-                ];
-            });
+        $categoryData = $this->fetchTransactions($startDate, $endDate);
 
         $totalSum = $categoryData->sum('total');
 
@@ -44,8 +30,8 @@ final class ExpenseCategoryChart extends ChartWidget
             return [
                 'datasets' => [
                     [
-                        'data'            => [0], // Placeholder data to force render
-                        'backgroundColor' => ['rgba(150, 150, 150, 0.8)'], // Gray for no data
+                        'data'            => [0],
+                        'backgroundColor' => ['rgba(150, 150, 150, 0.8)'],
                         'borderColor'     => ['rgba(150, 150, 150, 1)'],
                     ],
                 ],
@@ -55,9 +41,8 @@ final class ExpenseCategoryChart extends ChartWidget
 
         $labels           = $categoryData->keys();
         $data             = $categoryData->pluck('total')->values();
-        $backgroundColors = $categoryData->pluck('color')->map(fn ($color) => $color . '80')
-            ->values();
-        $borderColors = $categoryData->pluck('color')->values();
+        $backgroundColors = $categoryData->pluck('color')->map(fn ($color) => $color . '80')->values();
+        $borderColors       = $categoryData->pluck('color')->values();
 
         return [
             'datasets' => [
@@ -76,5 +61,23 @@ final class ExpenseCategoryChart extends ChartWidget
     protected function getType(): string
     {
         return 'doughnut';
+    }
+
+    private function fetchTransactions(Carbon $startDate, Carbon $endDate) {
+        return Transaction::query()
+            ->fromUser()
+            ->with('category')
+            ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->where('type', TransactionTypeEnum::EXPENSE)
+            ->get()
+            ->groupBy('category.name')
+            ->map(function (Collection $transactions) {
+                $category = $transactions->first()->category;
+
+                return [
+                    'total' => $transactions->sum('value'),
+                    'color' => $category ? $category->color ?? '#808080' : '#808080',
+                ];
+            });
     }
 }
