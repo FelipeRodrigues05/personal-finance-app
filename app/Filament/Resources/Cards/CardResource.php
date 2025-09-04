@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Cards;
 
 use App\Filament\Resources\Cards\Pages\ManageCards;
+use App\Filament\Resources\Cards\Schemas\CardSchema;
 use App\Models\Card;
 use BackedEnum;
 use Exception;
@@ -18,6 +19,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 
 final class CardResource extends Resource
@@ -33,14 +35,7 @@ final class CardResource extends Resource
      */
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('name'),
-                ColorPicker::make('color'),
-                TextInput::make('limit')->prefix('R$')->numeric(),
-                TextInput::make('used')->prefix('R$')->numeric(),
-                Radio::make('type')->options(['Credit', 'Debit'])->default('type'),
-            ]);
+        return CardSchema::configure($schema);
     }
 
     /**
@@ -50,14 +45,7 @@ final class CardResource extends Resource
     {
         return $table
             ->recordTitleAttribute('Cards')
-            ->columns([
-                ColorColumn::make('color')->copyable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('type')->badge(),
-                TextColumn::make('limit')->money('BRL', locale: 'pt-BR'),
-                TextColumn::make('used')->money('BRL', locale: 'pt-BR'),
-            ])
+            ->columns(self::getColumns())
             ->filters([])
             ->recordActions([
                 EditAction::make(),
@@ -74,6 +62,31 @@ final class CardResource extends Resource
     {
         return [
             'index' => ManageCards::route('/'),
+        ];
+    }
+
+    private static function getColumns(): array {
+        return [
+            ColorColumn::make('color')->label(__('Card Color'))
+                ->copyable(),
+
+            TextColumn::make('name')->label(__('Card Name'))
+                ->searchable(),
+            TextColumn::make('type')->label(__('Card Type'))
+                ->badge(),
+
+            TextColumn::make('limit')->label(__('Total Limit'))
+                ->money('BRL', locale: 'pt-BR'),
+
+            TextColumn::make('used')->label(__('Limit Used'))
+                ->money('BRL', locale: 'pt-BR'),
+
+            ViewColumn::make('usage')->label('Limit Usage')
+                ->getStateUsing(fn (Card $record) => $record->limit > 0
+                    ? round(($record->used / $record->limit) * 100)
+                    : 0
+                )
+                ->view('tables.columns.progress-bar'),
         ];
     }
 }
