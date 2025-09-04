@@ -2,24 +2,33 @@
 
 namespace App\Filament\Resources\Transactions;
 
+use App\Actions\Transaction\UpdateTransactionAction;
 use App\Enums\TransactionTypeEnum;
 use App\Filament\Exports\TransactionExporter;
+use App\Filament\Imports\TransactionImporter;
 use App\Filament\Resources\Transactions\Pages\ManageTransactions;
 use App\Filament\Resources\Transactions\Pages\ViewTransaction;
+use App\Filament\Resources\Transactions\Schemas\TransactionSchema;
+use App\Models\Card;
 use App\Models\Category;
 use App\Models\Transaction;
 use BackedEnum;
+use Exception;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
+use Filament\Actions\ExportBulkAction;
+use Filament\Actions\ImportAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontFamily;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Icons\Heroicon;
@@ -36,8 +45,12 @@ final class TransactionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Transaction';
 
+    public static function form(Schema $schema): Schema
+    {
+        return TransactionSchema::configure($schema);
+    }
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public static function table(Table $table): Table
     {
@@ -47,43 +60,21 @@ final class TransactionResource extends Resource
             ->columns(self::getColumns())
             ->filters([
                 SelectFilter::make('category')
-                    ->relationship('category', 'name')->searchable(),
+                    ->relationship('category', 'name')->native(false),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make()->schema([
-                    Section::make('Transaction Receipt')
-                        ->schema([
-                            FileUpload::make('image_path')
-                                ->disk('s3')
-                                ->visibility('public')
-                                ->previewable()
-                                ->live()
-                        ]),
-                    Section::make('Transaction Information')
-                        ->schema([
-                            TextInput::make('value'),
-                            DatePicker::make('transaction_date'),
-                            Select::make('type')->options([
-                                "income" => "Income",
-                                "expense" => "Expense",
-                            ])->native(false),
-                            Select::make('category')
-                                ->options(Category::query()->fromUser()->pluck('name'))
-                                ->native(false),
-                        ]),
-                    Section::make('Transaction Description')
-                        ->schema([
-                            MarkdownEditor::make('description'),
-                        ])
-                ]),
+                EditAction::make()->action(fn (array $data) => UpdateTransactionAction::handle(collect($data))),
                 DeleteAction::make(),
             ])
-            ->headerActions([
-                ExportAction::make()
-                    ->exporter(TransactionExporter::class),
-            ])
-            ->toolbarActions([]);
+            ->toolbarActions([
+                ExportBulkAction::make()
+                    ->exporter(TransactionExporter::class)
+            ])->headerActions([
+//                ImportAction::make()
+//                    ->importer(TransactionImporter::class),
+//                ExportAction::make()
+//                    ->exporter(TransactionExporter::class),
+            ]);
     }
 
     public static function getPages(): array
@@ -104,9 +95,8 @@ final class TransactionResource extends Resource
         return 'The number of transactions';
     }
 
-
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private static function getColumns(): array
     {
@@ -135,7 +125,7 @@ final class TransactionResource extends Resource
 
             TextColumn::make('category.name')->badge(),
 
-            TextColumn::make('transaction_date')->dateTime('M j, Y')->sortable(),
+            TextColumn::make('transaction_date')->dateTime('M j, Y')->sortable()->searchable(),
 
             IconColumn::make('is_recurrent')->boolean()
 
