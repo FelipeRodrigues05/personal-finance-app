@@ -4,13 +4,10 @@ namespace App\Filament\Resources\Cards;
 
 use App\Filament\Resources\Cards\Pages\ManageCards;
 use App\Filament\Resources\Cards\Schemas\CardSchema;
+use App\Filament\Resources\Cards\Tables\CardTable;
 use App\Models\Card;
 use BackedEnum;
 use Exception;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -40,19 +37,7 @@ final class CardResource extends Resource
      */
     public static function table(Table $table): Table
     {
-        return $table
-            ->recordTitleAttribute('Cards')
-            ->columns(self::getColumns())
-            ->filters([])
-            ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+        return CardTable::configure($table);
     }
 
     public static function getPages(): array
