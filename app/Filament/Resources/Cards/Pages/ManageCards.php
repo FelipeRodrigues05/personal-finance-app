@@ -12,7 +12,6 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\ManageRecords;
 use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
 final class ManageCards extends ManageRecords
@@ -32,7 +31,7 @@ final class ManageCards extends ManageRecords
     public function getHeaderWidgets(): array
     {
         return [
-            CardStatsWidget::make()
+            CardStatsWidget::make(),
         ];
     }
 

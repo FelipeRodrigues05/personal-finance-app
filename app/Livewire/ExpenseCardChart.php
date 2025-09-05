@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Card;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Contracts\Support\Htmlable;
 
 final class ExpenseCardChart extends ChartWidget
 {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Livewire;
 
@@ -8,7 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 
-class CardStatsWidget extends StatsOverviewWidget
+final class CardStatsWidget extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
@@ -21,7 +21,8 @@ class CardStatsWidget extends StatsOverviewWidget
         ];
     }
 
-    private function getUserCards(): Collection {
+    private function getUserCards(): Collection
+    {
         return Card::query()->fromUser()->get();
     }
 }

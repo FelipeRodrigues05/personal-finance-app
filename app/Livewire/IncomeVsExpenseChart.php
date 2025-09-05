@@ -9,7 +9,6 @@ use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Contracts\Support\Htmlable;
 
 final class IncomeVsExpenseChart extends ChartWidget
 {
