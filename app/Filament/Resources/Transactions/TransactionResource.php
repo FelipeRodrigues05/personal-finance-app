@@ -92,7 +92,7 @@ final class TransactionResource extends Resource
 
     public static function getNavigationBadgeTooltip(): ?string
     {
-        return 'The number of transactions';
+        return __('Total of Transactions');
     }
 
     /**

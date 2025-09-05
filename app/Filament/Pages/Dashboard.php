@@ -20,7 +20,7 @@ final class Dashboard extends \Filament\Pages\Dashboard
     use HasFiltersAction;
     use InteractsWithPageFilters;
 
-    protected static string|null|BackedEnum $navigationIcon = Heroicon::BookOpen;
+    protected static string|null|BackedEnum $navigationIcon = Heroicon::Home;
 
     protected static ?string $recordTitleAttribute = 'Dashboard';
 

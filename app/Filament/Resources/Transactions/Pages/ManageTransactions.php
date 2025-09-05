@@ -21,14 +21,20 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Htmlable;
 
 final class ManageTransactions extends ManageRecords
 {
     protected static string $resource = TransactionResource::class;
+    public function getHeading(): string
+    {
+        return __('Your transactions');
+    }
 
-    protected ?string $heading = 'Transactions';
-
-    protected ?string $subheading = 'A list of all Transactions';
+    public function getSubheading(): string
+    {
+        return __('Keep track of all your income and expenses');
+    }
 
     public function getTabs(): array
     {

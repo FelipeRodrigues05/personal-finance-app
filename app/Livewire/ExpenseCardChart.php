@@ -4,10 +4,14 @@ namespace App\Livewire;
 
 use App\Models\Card;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Contracts\Support\Htmlable;
 
 final class ExpenseCardChart extends ChartWidget
 {
-    protected ?string $heading = 'Expense Card Chart';
+    public function getHeading(): string
+    {
+        return __("Cards Expenses");
+    }
 
     protected function getData(): array
     {
@@ -16,12 +20,12 @@ final class ExpenseCardChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label'           => 'Used Limit',
+                    'label'           => __('Used Limit'),
                     'data'            => $cards->pluck('used'),
                     'backgroundColor' => $cards->pluck('color')->values(),
                 ],
                 [
-                    'label'           => 'Total Limit',
+                    'label'           => __('Total Limit'),
                     'data'            => $cards->pluck('limit'),
                     'backgroundColor' => $cards->pluck('color')->values(),
                 ],

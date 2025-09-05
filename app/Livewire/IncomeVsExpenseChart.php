@@ -9,14 +9,16 @@ use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Illuminate\Contracts\Support\Htmlable;
 
 final class IncomeVsExpenseChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected ?string $heading = 'Income Vs Expense';
-
-    protected ?string $pollingInterval = '10s';
+    public function getHeading(): string
+    {
+        return __('Incomes vs Expense');
+    }
 
     protected function getData(): array
     {
@@ -38,11 +40,11 @@ final class IncomeVsExpenseChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Income',
+                    'label' => __('Incomes'),
                     'data'  => $income->map(fn (TrendValue $trend) => $trend->aggregate),
                 ],
                 [
-                    'label'           => 'Expenses',
+                    'label'           => __('Expenses'),
                     'data'            => $expense->map(fn (TrendValue $trend) => $trend->aggregate),
                     'backgroundColor' => '#820202',
                     'borderColor'     => '#ff0000',

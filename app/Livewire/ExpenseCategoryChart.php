@@ -13,9 +13,10 @@ final class ExpenseCategoryChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected ?string $heading = 'Expense Category Chart';
-
-    protected int|string|array $columnSpan = '1/2';
+    public function getHeading(): string
+    {
+        return __("Categories Expenses");
+    }
 
     protected function getData(): array
     {

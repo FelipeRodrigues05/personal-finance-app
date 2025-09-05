@@ -16,6 +16,16 @@ final class ManageCategories extends ManageRecords
 {
     protected static string $resource = CategoryResource::class;
 
+    public function getHeading(): string
+    {
+        return __('Your Categories');
+    }
+
+    public function getSubheading(): string
+    {
+        return __('Keep track of all your categories');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
