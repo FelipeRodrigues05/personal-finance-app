@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Categories;
 
 use App\Filament\Resources\Categories\Pages\ManageCategories;
+use App\Filament\Resources\Categories\Schemas\CategorySchema;
+use App\Filament\Resources\Categories\Tables\CategoryTable;
 use App\Models\Category;
 use BackedEnum;
 use Exception;
@@ -26,32 +28,21 @@ final class CategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Category';
 
+    public static function form(Schema $schema): Schema {
+        return CategorySchema::configure($schema);
+    }
     /**
      * @throws Exception
      */
     public static function table(Table $table): Table
     {
-        return $table
-            ->recordTitleAttribute('Category')
-            ->columns(self::getColumns())
-            ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ]);
+        return CategoryTable::configure($table);
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ManageCategories::route('/'),
-        ];
-    }
-
-    private static function getColumns(): array {
-        return [
-            TextColumn::make('name')->label(__('Category Name'))
-                ->searchable(),
-            ColorColumn::make('color')->label(__('Category Color')),
         ];
     }
 }
