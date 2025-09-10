@@ -1,5 +1,6 @@
 <?php declare(strict_types = 1);
 
+use App\Enums\Recurrence;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +18,9 @@ return new class () extends Migration {
             $table->foreignIdFor(User::class);
 
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
+            $table->decimal('tax');
+            $table->enum('recurrence', Recurrence::cases());
             $table->decimal('amount');
             $table->timestamps();
         });

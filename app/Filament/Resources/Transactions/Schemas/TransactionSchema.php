@@ -23,6 +23,7 @@ final class TransactionSchema
                         FileUpload::make('image_path')->label(__('Image'))
                             ->disk('s3')
                             ->visibility('public'),
+
                         TextInput::make('id')->readOnly(),
 
                         TextInput::make('value')->label(__('Transaction Value'))->prefix("R$ "),

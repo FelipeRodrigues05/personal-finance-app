@@ -21,6 +21,8 @@ final class TransactionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Banknotes;
 
     protected static ?string $recordTitleAttribute = 'Transaction';
+    protected static string|null|\UnitEnum $navigationGroup = 'Financial';
+
 
     public static function form(Schema $schema): Schema
     {

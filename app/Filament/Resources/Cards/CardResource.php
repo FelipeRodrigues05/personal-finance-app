@@ -15,6 +15,7 @@ use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 final class CardResource extends Resource
 {
@@ -23,6 +24,8 @@ final class CardResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::CreditCard;
 
     protected static ?string $recordTitleAttribute = 'Cards';
+
+    protected static string|null|UnitEnum $navigationGroup = 'Financial';
 
     /**
      * @throws Exception

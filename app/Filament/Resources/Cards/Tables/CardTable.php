@@ -17,7 +17,7 @@ final class CardTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->query(fn (): Builder => Card::query())
+            ->query(fn (): Builder => Card::query()->fromUser())
             ->columns([
                 TextColumn::make('user.name')
                     ->searchable()
