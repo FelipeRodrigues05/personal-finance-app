@@ -1,0 +1,42 @@
+<?php declare(strict_types = 1);
+
+use App\Enums\TransactionTypeEnum;
+use App\Models\Card;
+use App\Models\Category;
+use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class () extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('transactions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Category::class, 'category_id');
+            $table->foreignIdFor(User::class, 'user_id');
+            $table->foreignIdFor(Card::class, 'card_id')->nullable();
+
+            $table->decimal('value', 10, 2);
+            $table->enum('type', TransactionTypeEnum::cases());
+            $table->timestamp('transaction_date');
+            $table->text('description')->nullable();
+            $table->string('image_path')->nullable();
+            $table->boolean('used_card')->nullable();
+            $table->boolean('is_recurrent')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('transactions');
+    }
+};

@@ -1,0 +1,130 @@
+{
+    "preset": "psr12",
+    "notPath": [
+        "tests/TestCase.php",
+        "app/Filament/Resources/Categories/CategoryResource",
+        "app/Filament/Resources/Transactions/TransactionResource"
+    ],
+    "rules": {
+        "declare_strict_types": true,
+        "strict_comparison": true,
+        "no_unused_imports": true,
+        "no_useless_return": true,
+        "no_useless_else": true,
+        "no_superfluous_elseif": true,
+        "no_multiple_statements_per_line": true,
+        "encoding": true,
+        "final_class": true,
+        "final_internal_class": true,
+        "final_public_method_for_abstract_class": true,
+        "protected_to_private": true,
+        "self_accessor": true,
+        "self_static_accessor": true,
+        "visibility_required": true,
+        "ordered_imports": true,
+        "group_import": false,
+        "single_import_per_statement": false,
+        "ordered_class_elements": {
+            "order": [
+                "use_trait",
+                "case",
+                "constant",
+                "constant_public",
+                "constant_protected",
+                "constant_private",
+                "property_public",
+                "property_protected",
+                "property_private",
+                "construct",
+                "destruct",
+                "magic",
+                "phpunit",
+                "method_abstract",
+                "method_public_static",
+                "method_public",
+                "method_protected_static",
+                "method_protected",
+                "method_private_static",
+                "method_private"
+            ],
+            "sort_algorithm": "none"
+        },
+        "ordered_interfaces": true,
+        "ordered_traits": true,
+        "binary_operator_spaces": {
+            "default": "align_single_space_minimal"
+        },
+        "new_with_parentheses": true,
+        "concat_space": {
+            "spacing": "one"
+        },
+        "trailing_comma_in_multiline": true,
+        "trim_array_spaces": true,
+        "unary_operator_spaces": true,
+        "no_extra_blank_lines": true,
+        "no_multiline_whitespace_around_double_arrow": true,
+        "multiline_whitespace_before_semicolons": true,
+        "no_singleline_whitespace_before_semicolons": true,
+        "no_spaces_around_offset": true,
+        "ternary_operator_spaces": true,
+        "blank_line_after_namespace": true,
+        "blank_line_after_opening_tag": false,
+        "blank_line_before_statement": {
+            "statements": [
+                "break",
+                "continue",
+                "declare",
+                "return",
+                "throw",
+                "try",
+                "continue",
+                "do",
+                "exit",
+                "for",
+                "foreach",
+                "if",
+                "include",
+                "include_once",
+                "require",
+                "require_once"
+            ]
+        },
+        "elseif": false,
+        "indentation_type": true,
+        "array_indentation": true,
+        "whitespace_after_comma_in_array": true,
+        "array_push": true,
+        "array_syntax": {
+            "syntax": "short"
+        },
+        "modernize_types_casting": true,
+        "mb_str_functions": true,
+        "backtick_to_shell_exec": true,
+        "fully_qualified_strict_types": true,
+        "date_time_immutable": true,
+        "global_namespace_import": {
+            "import_classes": true,
+            "import_constants": true,
+            "import_functions": true
+        },
+        "declare_equal_normalize": {
+            "space": "single"
+        },
+        "lowercase_keywords": true,
+        "lowercase_static_reference": true,
+        "ternary_to_null_coalescing": true,
+        "phpdoc_trim": true,
+        "phpdoc_summary": true,
+        "phpdoc_align": {
+            "align": "vertical",
+            "spacing": {
+                "param": 1
+            }
+        },
+        "class_attributes_separation": {
+            "elements": {
+                "property": "one"
+            }
+        }
+    }
+}

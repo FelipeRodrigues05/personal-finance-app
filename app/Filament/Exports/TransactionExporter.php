@@ -1,0 +1,50 @@
+<?php declare(strict_types = 1);
+
+namespace App\Filament\Exports;
+
+use App\Enums\TransactionTypeEnum;
+use App\Models\Transaction;
+use Exception;
+use Filament\Actions\Exports\ExportColumn;
+use Filament\Actions\Exports\Exporter;
+use Filament\Actions\Exports\Models\Export;
+use Illuminate\Support\Number;
+
+final class TransactionExporter extends Exporter
+{
+    protected static ?string $model = Transaction::class;
+
+    /**
+     * @throws Exception
+     */
+    public static function getColumns(): array
+    {
+        return [
+            ExportColumn::make('id')
+                ->label('ID'),
+            ExportColumn::make('category.name'),
+            ExportColumn::make('user.name'),
+            ExportColumn::make('card.name'),
+            ExportColumn::make('value'),
+            ExportColumn::make('type')->formatStateUsing(fn ($state) => $state instanceof TransactionTypeEnum ? $state->value : $state),
+            ExportColumn::make('transaction_date'),
+            ExportColumn::make('description'),
+            ExportColumn::make('image_path'),
+            ExportColumn::make('used_card'),
+            ExportColumn::make('created_at'),
+            ExportColumn::make('updated_at'),
+            ExportColumn::make('deleted_at'),
+        ];
+    }
+
+    public static function getCompletedNotificationBody(Export $export): string
+    {
+        $body = 'Your transaction export has completed and ' . Number::format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+
+        if ($failedRowsCount = $export->getFailedRowsCount()) {
+            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
+        }
+
+        return $body;
+    }
+}
