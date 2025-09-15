@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Investment;
 use App\Models\User;
 
@@ -12,7 +13,7 @@ final class InvestmentsPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->role == UserRole::ADMIN;
     }
 
     /**
@@ -20,7 +21,7 @@ final class InvestmentsPolicy
      */
     public function view(User $user, Investment $investment): bool
     {
-        return $investment->user_id === $user->id;
+        return $investment->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -36,7 +37,7 @@ final class InvestmentsPolicy
      */
     public function update(User $user, Investment $investment): bool
     {
-        return $investment->user_id === $user->id;
+        return $investment->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -44,7 +45,7 @@ final class InvestmentsPolicy
      */
     public function delete(User $user, Investment $investment): bool
     {
-        return $investment->user_id === $user->id;
+        return $investment->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -52,7 +53,7 @@ final class InvestmentsPolicy
      */
     public function restore(User $user, Investment $investment): bool
     {
-        return $investment->user_id === $user->id;
+        return $investment->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -60,6 +61,6 @@ final class InvestmentsPolicy
      */
     public function forceDelete(User $user, Investment $investment): bool
     {
-        return $investment->user_id === $user->id;
+        return $investment->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 }

@@ -21,7 +21,7 @@ final class CategoryPolicy
      */
     public function view(User $user, Category $category): bool
     {
-        return $user->role === UserRole::ADMIN && $category->user_id === $user->id;
+        return $category->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -37,7 +37,7 @@ final class CategoryPolicy
      */
     public function update(User $user, Category $category): bool
     {
-        return $user->role === UserRole::ADMIN && $category->user_id === $user->id;
+        return $category->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -45,7 +45,7 @@ final class CategoryPolicy
      */
     public function delete(User $user, Category $category): bool
     {
-        return $user->role === UserRole::ADMIN && $category->user_id === $user->id;
+        return $category->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -53,7 +53,7 @@ final class CategoryPolicy
      */
     public function restore(User $user, Category $category): bool
     {
-        return $user->role === UserRole::ADMIN && $category->user_id === $user->id;
+        return $category->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -61,6 +61,6 @@ final class CategoryPolicy
      */
     public function forceDelete(User $user, Category $category): bool
     {
-        return $user->role === UserRole::ADMIN && $category->user_id === $user->id;
+        return $category->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Enums\UserRole;
 use App\Models\Family;
+use App\Models\Group;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +21,7 @@ return new class () extends Migration {
             $table->string('password');
             $table->enum('role', UserRole::cases())->default(UserRole::DEFAULT);
 
-            $table->foreignIdFor(Family::class)->nullable();
+            $table->foreignIdFor(Group::class)->nullable();
 
             $table->rememberToken();
             $table->timestamps();

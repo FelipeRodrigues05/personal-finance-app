@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-final class User extends Authenticatable
+final class User extends Authenticatable implements HasAvatar
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
@@ -27,7 +27,8 @@ final class User extends Authenticatable
         'email',
         'password',
         'role',
-        'family_id',
+        'group_id',
+        'avatar_url',
     ];
 
     /**
@@ -50,9 +51,9 @@ final class User extends Authenticatable
         return $this->hasMany(Category::class);
     }
 
-    public function family(): BelongsTo
+    public function group(): BelongsTo
     {
-        return $this->belongsTo(Family::class);
+        return $this->belongsTo(Group::class);
     }
 
     public function investments(): HasMany
@@ -60,9 +61,9 @@ final class User extends Authenticatable
         return $this->hasMany(Investment::class);
     }
 
-    public function goals(): HasMany
+    public function getFilamentAvatarUrl(): ?string
     {
-        return $this->hasMany(Goal::class);
+        return $this->avatar_url;
     }
 
     /**

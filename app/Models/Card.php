@@ -10,6 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+/**
+ * @property string $user_id
+ * @property string $name
+ * @property float $limit
+ * @property float $used
+ * @property CardType $type
+ * @property string $color
+ */
 final class Card extends Model
 {
     /** @use HasFactory<CardFactory> */

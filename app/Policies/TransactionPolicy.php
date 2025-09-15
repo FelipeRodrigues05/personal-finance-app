@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\Transaction;
 use App\Models\User;
 
@@ -12,7 +13,7 @@ final class TransactionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->role == UserRole::ADMIN;
     }
 
     /**
@@ -20,7 +21,7 @@ final class TransactionPolicy
      */
     public function view(User $user, Transaction $transaction): bool
     {
-        return $transaction->user_id === $user->id;
+        return $transaction->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -36,7 +37,7 @@ final class TransactionPolicy
      */
     public function update(User $user, Transaction $transaction): bool
     {
-        return $transaction->user_id === $user->id;
+        return $transaction->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -44,7 +45,7 @@ final class TransactionPolicy
      */
     public function delete(User $user, Transaction $transaction): bool
     {
-        return $transaction->user_id === $user->id;
+        return $transaction->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -52,7 +53,7 @@ final class TransactionPolicy
      */
     public function restore(User $user, Transaction $transaction): bool
     {
-        return $transaction->user_id === $user->id;
+        return $transaction->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 
     /**
@@ -60,6 +61,6 @@ final class TransactionPolicy
      */
     public function forceDelete(User $user, Transaction $transaction): bool
     {
-        return $transaction->user_id === $user->id;
+        return $transaction->user_id === $user->id or $user->role == UserRole::GROUP_ADMIN;
     }
 }

@@ -14,7 +14,7 @@ final class CardPolicy
     public function viewAny(User $user): bool
     {
         return $user->role === UserRole::ADMIN;
-        ;
+
     }
 
     /**
@@ -22,7 +22,7 @@ final class CardPolicy
      */
     public function view(User $user, Card $card): bool
     {
-        return $user->role === UserRole::ADMIN && $card->user_id === $user->id;
+        return $card->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -38,7 +38,7 @@ final class CardPolicy
      */
     public function update(User $user, Card $card): bool
     {
-        return $user->role === UserRole::ADMIN && $card->user_id === $user->id;
+        return $card->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -46,7 +46,7 @@ final class CardPolicy
      */
     public function delete(User $user, Card $card): bool
     {
-        return $user->role === UserRole::ADMIN && $card->user_id === $user->id;
+        return $card->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -54,7 +54,7 @@ final class CardPolicy
      */
     public function restore(User $user, Card $card): bool
     {
-        return $user->role === UserRole::ADMIN && $card->user_id === $user->id;
+        return $card->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 
     /**
@@ -62,6 +62,6 @@ final class CardPolicy
      */
     public function forceDelete(User $user, Card $card): bool
     {
-        return $user->role === UserRole::ADMIN && $card->user_id === $user->id;
+        return $card->user_id == $user->id or in_array($user->role, [UserRole::GROUP_ADMIN, UserRole::ADMIN], true);
     }
 }
