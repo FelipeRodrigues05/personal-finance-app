@@ -13,7 +13,7 @@ final class CategoryPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role === UserRole::ADMIN;
+        return true;
     }
 
     /**
