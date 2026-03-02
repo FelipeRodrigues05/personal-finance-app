@@ -1,61 +1,140 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Personal Finance App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+O **Personal Finance App** é um sistema criado para ajudar pessoas a finalmente terem clareza sobre sua vida financeira.
 
-## About Laravel
+Muita gente não tem uma forma simples, visual e organizada de acompanhar gastos e foi justamente isso que me motivou a construir esta aplicação.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Além disso, o projeto trouxe um desafio técnico interessante: estruturar uma aplicação complexa usando FilamentPHP, com forte manipulação de dados, múltiplos tipos de transações, uploads, integrações e persistência distribuída.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O resultado é um sistema moderno, robusto e fácil de usar.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📊 Visão Geral do Projeto
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+O sistema oferece:
+- Dashboard intuitiva com overview financeiro
+- Registro de despesas e receitas
+- Controle de gastos no cartão
+- Rendimentos de investimentos
+- Upload de vouchers (comprovantes) para Amazon S3
+- Admin Panel completo com FilamentPHP
+- Infra moderna com:
+  - Docker
+  - Redis (cache e filas) 
+  - PostgreSQL
+  - AWS S3
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🧩 Tecnologias Utilizadas
+| Tecnologia                         | Descrição                                        |
+| ---------------------------------- | ------------------------------------------------ |
+| **PHP 8.4**                        | Backend moderno e tipado                         |
+| **Laravel 12**                     | Core da aplicação, rotas, serviços e arquitetura |
+| **FilamentPHP**                    | Painel administrativo completo                   |
+| **PostgreSQL**                     | Banco de dados principal                         |
+| **Redis**                          | Cache, filas e otimizações                       |
+| **Amazon S3**                      | Armazenamento de vouchers (comprovantes)         |
+| **Docker / Docker Compose**        | Ambiente containerizado                          |
+| **TailwindCSS**                    | Estilização frontend                             |
+| **Arquitetura Services + Actions** | Organização limpa e escalável                    |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+--- 
 
-## Laravel Sponsors
+## 🚀 Funcionalidades Implementadas
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Gestão completa de despesas e receitas
+- Gastos no cartão com histórico detalhado
+- Rendas de investimentos
+- Dashboard com gráficos e indicadores
+- Upload e consulta de vouchers direto na S3
+- CRUDs administrativos via FilamentPHP
+- Sistema otimizado com Redis para cache
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🔧 Principais Desafios Técnicos
 
-## Contributing
+- Organização da manipulação de dados financeiros com múltiplas origens
+- Integração profunda com FilamentPHP, mantendo a UI simples e escalável
+- Sincronização de dados com PostgreSQL e Redis
+- Estrutura de uploads e processamento para S3
+- Construção de uma arquitetura limpa, separando responsabilidades
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🛠️ Funcionalidades em Desenvolvimento
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Gestão de grupos de pessoas
+> compartilhamento financeiro entre membros da família ou equipes
 
-## Security Vulnerabilities
+Suporte multilíngue
+> multi-idioma nativo
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Melhorias visuais na UI
+> novos dashboards, transições e refinamento da experiência
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📦 Como Rodar o Projeto (Docker)
+1. Clone o repositório
+```bash
+git clone https://github.com/FelipeRodrigues05/personal-finance-app
+```
+
+2. Acesse a pasta
+```bash
+cd personal-finance-app
+```
+
+3. Copie o arquivo de ambiente
+```bash
+cp .env.example .env
+```
+
+Configure:
+**PostgreSQL
+Redis
+S3 (bucket, keys, region)**
+
+4. Suba os containers
+```bash
+docker compose up -d --build
+```
+
+5. Instale dependências
+```bash
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate
+```
+6. Acesse a aplicação
+```bash
+http://localhost:8000
+```
+
+---
+
+## 📁 Estrutura do Projeto
+```
+app/
+ ├── Filament/
+ ├── Http/
+ ├── Models/
+ ├── Services/
+ ├── Actions/
+database/
+docker/
+resources/
+routes/
+```
+
+---
+
+## 🤝 Contribuições
+
+Sinta-se livre para abrir Issues e Pull Requests.
+Críticas, ideias e feedbacks são sempre bem-vindos.
+
+📜 Licença
+
+Este projeto está sob a licença MIT.
